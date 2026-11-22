@@ -35,7 +35,7 @@ public class PlaneadorOrquestador {
     private static final Logger log = LoggerFactory.getLogger(PlaneadorOrquestador.class);
 
     /** Límite de autonomía: máximo de especialistas por pregunta. */
-    private static final int MAX_PASOS = 3;
+    private static final int MAX_PASOS = 4;
 
     private final Progreso progreso;
     private final ChatClient supervisor;
@@ -47,13 +47,15 @@ public class PlaneadorOrquestador {
                                 @Qualifier("sintetizador") ChatClient sintetizador,
                                 @Qualifier("agenteClima") ChatClient agenteClima,
                                 @Qualifier("agentePresupuesto") ChatClient agentePresupuesto,
-                                @Qualifier("agenteReservas") ChatClient agenteReservas) {
+                                @Qualifier("agenteReservas") ChatClient agenteReservas,
+                                @Qualifier("agenteActividades") ChatClient agenteActividades) {
         this.progreso = progreso;
         this.supervisor = supervisor;
         this.sintetizador = sintetizador;
         especialistas.put(Agente.CLIMA, agenteClima);
         especialistas.put(Agente.PRESUPUESTO, agentePresupuesto);
         especialistas.put(Agente.RESERVAS, agenteReservas);
+        especialistas.put(Agente.ACTIVIDADES, agenteActividades);
     }
 
     public String planear(String pregunta) {

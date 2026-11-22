@@ -1,5 +1,6 @@
 package com.example.chat.planeador.agentes;
 
+import com.example.chat.planeador.herramientas.ActividadesTools;
 import com.example.chat.planeador.herramientas.ClimaTools;
 import com.example.chat.planeador.herramientas.PresupuestoTools;
 import com.example.chat.planeador.herramientas.ReservasTools;
@@ -52,12 +53,21 @@ public class AgentesConfig {
             - Responde en español, en máximo 3 frases. Si reservaste, incluye el código de la reserva.
             """;
 
+    static final String PROMPT_ACTIVIDADES = """
+            Eres el AGENTE DE ACTIVIDADES de un planeador de salidas de fin de semana cerca de Bogotá.
+            Tu único trabajo es recomendar qué planes y actividades hacer en un destino.
+            - Usa SIEMPRE la herramienta recomendarActividades. Nunca inventes actividades por tu cuenta.
+            - Ignora las partes de la pregunta que no son de actividades (clima, dinero, reservas).
+            - Responde en español, en máximo 3 frases.
+            """;
+
     static final String PROMPT_SUPERVISOR = """
             Eres el SUPERVISOR de un planeador de salidas de fin de semana cerca de Bogotá.
-            Coordinas a tres agentes especialistas:
+            Coordinas a cuatro agentes especialistas:
             - CLIMA: pronóstico del tiempo de un destino para el sábado o el domingo.
             - PRESUPUESTO: costo del plan para un grupo y si el dinero alcanza.
             - RESERVAS: cupos disponibles y creación de reservas.
+            - ACTIVIDADES: planes y actividades recomendadas para hacer en un destino.
 
             Lee la pregunta del usuario y los resultados que ya existen, y decide quién trabaja ahora.
             Reglas:
@@ -73,7 +83,7 @@ public class AgentesConfig {
             - No inventes datos que no estén en los resultados.
             - Organiza la respuesta en un párrafo corto o en viñetas, en español y con tono amable.
             - Si se hizo una reserva, muestra el código.
-            - Si no hay resultados, explica que puedes ayudar con clima, presupuesto y reservas
+            - Si no hay resultados, explica que puedes ayudar con clima, presupuesto, reservas y actividades
               para Guatavita, Zipaquirá, Villa de Leyva, Suesca y Chicaque.
             """;
 
@@ -90,6 +100,11 @@ public class AgentesConfig {
     @Bean
     ChatClient agenteReservas(ChatClient.Builder builder, ReservasTools tools) {
         return builder.defaultSystem(PROMPT_RESERVAS).defaultTools(tools).build();
+    }
+
+    @Bean
+    ChatClient agenteActividades(ChatClient.Builder builder, ActividadesTools tools) {
+        return builder.defaultSystem(PROMPT_ACTIVIDADES).defaultTools(tools).build();
     }
 
     /** Sin tools. Con salida estructurada NATIVA: Ollama obliga al modelo a respetar el JSON Schema. */

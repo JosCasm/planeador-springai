@@ -24,8 +24,9 @@ public class AgentesDebugController {
 
     public AgentesDebugController(@Qualifier("agenteClima") ChatClient clima,
                                   @Qualifier("agentePresupuesto") ChatClient presupuesto,
-                                  @Qualifier("agenteReservas") ChatClient reservas) {
-        this.agentes = Map.of("clima", clima, "presupuesto", presupuesto, "reservas", reservas);
+                                  @Qualifier("agenteReservas") ChatClient reservas,
+                                  @Qualifier("agenteActividades") ChatClient actividades) {
+        this.agentes = Map.of("clima", clima, "presupuesto", presupuesto, "reservas", reservas, "actividades", actividades);
     }
 
     @GetMapping("/{agente}")

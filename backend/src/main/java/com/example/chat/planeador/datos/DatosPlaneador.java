@@ -34,6 +34,7 @@ public class DatosPlaneador {
     private final Map<String, String> alias = new LinkedHashMap<>();
     private final Map<String, Pronostico> pronostico = new LinkedHashMap<>();
     private final Map<String, Integer> cupos = new ConcurrentHashMap<>();
+    private final Map<String, List<String>> actividades = new LinkedHashMap<>();
     private final List<Reserva> reservas = new ArrayList<>();
 
     public DatosPlaneador() {
@@ -42,6 +43,27 @@ public class DatosPlaneador {
         destinos.put("villa de leyva", new Destino("Villa de Leyva", 70000, 0, 45000));
         destinos.put("suesca", new Destino("Rocas de Suesca", 25000, 15000, 30000));
         destinos.put("chicaque", new Destino("Parque Natural Chicaque", 20000, 35000, 35000));
+
+        actividades.put("guatavita", List.of(
+                "Caminata guiada por el sendero de la Laguna de Guatavita",
+                "Paseo en velero por el embalse de Tominé",
+                "Recorrido cultural y de artesanías por el pueblo blanco de Guatavita"));
+        actividades.put("zipaquira", List.of(
+                "Recorrido guiado por la Catedral de Sal subterránea",
+                "Caminata histórica por la Plaza de los Comuneros",
+                "Visita al Museo Arqueológico y almuerzo típico sabanero"));
+        actividades.put("villa de leyva", List.of(
+                "Recorrido por la Plaza Mayor y sus calles coloniales empedradas",
+                "Visita al Museo Paleontológico El Fósil y los Pozos Azules",
+                "Tour por el viñedo Ain Karim o paseo en cuatrimoto por el desierto"));
+        actividades.put("suesca", List.of(
+                "Escalada en roca con instructor certificado en los farallones",
+                "Caminata ecológica por el cañón del río Bogotá y la vía férrea",
+                "Rappel y ciclomontañismo por los senderos de Suesca"));
+        actividades.put("chicaque", List.of(
+                "Senderismo por el bosque de niebla hasta el Pico del Águila",
+                "Avistamiento de aves y visita al roble gigante",
+                "Canopy, arborismo o cabalgata ecológica por la reserva"));
 
         alias.put("laguna", "guatavita");
         alias.put("catedral", "zipaquira");
@@ -115,6 +137,8 @@ public class DatosPlaneador {
     public Pronostico pronostico(String clave, String dia) { return pronostico.get(clave + "|" + dia); }
 
     public int cupos(String clave, String dia) { return cupos.getOrDefault(clave + "|" + dia, 0); }
+
+    public List<String> actividades(String clave) { return actividades.getOrDefault(clave, List.of()); }
 
     /** Descuenta cupos y registra la reserva. synchronized: varias peticiones a la vez no se pisan. */
     public synchronized Reserva reservar(String clave, String dia, int personas, String responsable) {
